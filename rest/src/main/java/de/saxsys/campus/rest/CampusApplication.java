@@ -19,17 +19,6 @@ import de.saxsys.campus.rest.resource.UserResource;
 @ApplicationPath("/")
 public class CampusApplication extends Application {
 
-	public CampusApplication() {
-		// TODO delete jersey stuff [SB]
-		// packages("de.saxsys.campus.rest.resource");
-		// register(HalBuilderMessageBodyReader.class);
-		// register(HalBuilderMessageBodyWriter.class);
-		// register(RolesAllowedDynamicFeature.class);
-		// register(AuthenticationFilter.class);
-		// register(WebApplicationExceptionMapper.class);
-		// register(DefaultExceptionMapper.class);
-	}
-
 	@Override
 	public Set<Class<?>> getClasses() {
 		Set<Class<?>> classes = new HashSet<>();
@@ -44,12 +33,6 @@ public class CampusApplication extends Application {
 		classes.add(DefaultExceptionMapper.class);
 		// classes.add(RolesAllowedDynamicFeature.class);
 		return classes;
-	}
-
-	@Override
-	public Set<Object> getSingletons() {
-		// TODO Auto-generated method stub
-		return super.getSingletons();
 	}
 
 }
