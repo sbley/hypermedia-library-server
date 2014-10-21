@@ -1,10 +1,12 @@
 package de.saxsys.campus.rest.resource;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.enterprise.context.RequestScoped;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -36,152 +38,153 @@ import de.saxsys.campus.rest.hal.HalMediaTypes;
 import de.saxsys.campus.rest.mapping.ErrorMapper;
 import de.saxsys.campus.rest.mapping.SlotMapper;
 
-@RequestScoped
+@Stateless
 @Path("/slots")
-public class SlotResource {
+public class SlotResource implements Serializable {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(SlotResource.class);
+    private static final long serialVersionUID = 4444212476779216293L;
 
-	@Inject
-	private SlotManager slotManager;
+    private static final Logger LOGGER = LoggerFactory.getLogger(SlotResource.class);
 
-	@Inject
-	private ReservationManager reservationManager;
+    @EJB
+    private SlotManager slotManager;
 
-	@Inject
-	private UserManager userManager;
+    @EJB
+    private ReservationManager reservationManager;
 
-	@Inject
-	private SlotMapper slotMapper;
+    @EJB
+    private UserManager userManager;
 
-	@Inject
-	private ErrorMapper errorMapper;
+    @Inject
+    private SlotMapper slotMapper;
 
-	@Context
-	private UriInfo uriInfo;
+    @Inject
+    private ErrorMapper errorMapper;
 
-	@Context
-	private SecurityContext securityContext;
+    @Context
+    private UriInfo uriInfo;
 
-	@GET
-	@Produces(HalMediaTypes.HAL_JSON)
-	public Representation getSlots(@QueryParam("currentUser") boolean forCurrentUser) {
-		if (forCurrentUser) {
-			return slotMapper.createRepresentation(uriInfo, getCurrentUser().getSlotList(), true);
-		} else {
-			return slotMapper.createRepresentation(uriInfo, slotManager.allSlots(), false);
-		}
-	}
+    @Context
+    private SecurityContext securityContext;
 
-	@GET
-	@Path("{id}")
-	@Produces(HalMediaTypes.HAL_JSON)
-	public Representation getSlot(@PathParam("id") int id) {
-		Slot slot = slotManager.findSlot(id);
-		if (null == slot) {
-			throw new WebApplicationException(404);
-		}
-		return createSlotRepresentation(slot);
-	}
+    @GET
+    @Produces(HalMediaTypes.HAL_JSON)
+    public Representation getSlots(@QueryParam("currentUser") boolean forCurrentUser) {
+        if (forCurrentUser) {
+            return slotMapper.createRepresentation(uriInfo, getCurrentUser().getSlotList(), true);
+        } else {
+            return slotMapper.createRepresentation(uriInfo, slotManager.allSlots(), false);
+        }
+    }
 
-	@PUT
-	@Path("{id}")
-	@Consumes(HalMediaTypes.HAL_JSON)
-	@Produces(HalMediaTypes.HAL_JSON)
-	@RolesAllowed("admin")
-	public Response putSlot(@PathParam("id") int id, ReadableRepresentation representation) {
-		Slot slot = slotManager.findSlot(id);
-		if (null == slot) {
-			LOGGER.error("Could not update slot.");
-			throw new WebApplicationException(404);
-		}
-		slot = slotMapper.update(slot, representation);
-		slot = slotManager.updateSlot(slot);
-		Representation slotRepresentation = createSlotRepresentation(slot);
-		return Response.created(getSelfUri(slotRepresentation)).entity(slotRepresentation).build();
-	}
+    @GET
+    @Path("{id}")
+    @Produces(HalMediaTypes.HAL_JSON)
+    public Representation getSlot(@PathParam("id") int id) {
+        Slot slot = slotManager.findSlot(id);
+        if (null == slot) {
+            throw new WebApplicationException(404);
+        }
+        return createSlotRepresentation(slot);
+    }
 
-	@POST
-	@Consumes(HalMediaTypes.HAL_JSON)
-	@Produces(HalMediaTypes.HAL_JSON)
-	@RolesAllowed("admin")
-	public Response newSlot(ReadableRepresentation representation) {
-		try {
-			Slot newSlot = slotMapper.toEntity(null, representation);
-			slotManager.addSlot(newSlot);
-			Representation slotRepresentation = createSlotRepresentation(newSlot);
-			return Response.created(getSelfUri(slotRepresentation)).entity(slotRepresentation)
-					.build();
-		} catch (Exception e) {
-			LOGGER.error("Could not add slot.", e);
-			throw new WebApplicationException(Response.status(400)
-					.entity(errorMapper.createRepresentation("Could not add slot.", e)).build());
-		}
-	}
+    @PUT
+    @Path("{id}")
+    @Consumes(HalMediaTypes.HAL_JSON)
+    @Produces(HalMediaTypes.HAL_JSON)
+    @RolesAllowed("admin")
+    public Response putSlot(@PathParam("id") int id, ReadableRepresentation representation) {
+        Slot slot = slotManager.findSlot(id);
+        if (null == slot) {
+            LOGGER.error("Could not update slot.");
+            throw new WebApplicationException(404);
+        }
+        slot = slotMapper.update(slot, representation);
+        slot = slotManager.updateSlot(slot);
+        Representation slotRepresentation = createSlotRepresentation(slot);
+        return Response.created(getSelfUri(slotRepresentation)).entity(slotRepresentation).build();
+    }
 
-	@DELETE
-	@Path("{id}")
-	@RolesAllowed("admin")
-	public Response deleteSlot(@PathParam("id") int id) {
-		try {
-			slotManager.deleteSlot(id);
-		} catch (EJBException e) {
-			LOGGER.error("Could not delete slot.", e);
-			throw new WebApplicationException(404);
-		}
-		return Response.ok().build();
-	}
+    @POST
+    @Consumes(HalMediaTypes.HAL_JSON)
+    @Produces(HalMediaTypes.HAL_JSON)
+    @RolesAllowed("admin")
+    public Response newSlot(ReadableRepresentation representation) {
+        try {
+            Slot newSlot = slotMapper.toEntity(null, representation);
+            slotManager.addSlot(newSlot);
+            Representation slotRepresentation = createSlotRepresentation(newSlot);
+            return Response.created(getSelfUri(slotRepresentation)).entity(slotRepresentation).build();
+        } catch (Exception e) {
+            LOGGER.error("Could not add slot.", e);
+            throw new WebApplicationException(Response.status(400)
+                    .entity(errorMapper.createRepresentation("Could not add slot.", e)).build());
+        }
+    }
 
-	@GET
-	@Path("{id}/participants")
-	@Produces(HalMediaTypes.HAL_JSON)
-	public Response getParticipants(@PathParam("id") int id) {
-		Slot slot = slotManager.findSlot(id);
-		if (null == slot) {
-			throw new WebApplicationException(404);
-		}
-		Representation participantsRepresentation = slotMapper.createParticipantsRepresentation(
-				uriInfo.getBaseUri(), slot, true);
-		return Response.ok().entity(participantsRepresentation).build();
-	}
+    @DELETE
+    @Path("{id}")
+    @RolesAllowed("admin")
+    public Response deleteSlot(@PathParam("id") int id) {
+        try {
+            slotManager.deleteSlot(id);
+        } catch (EJBException e) {
+            LOGGER.error("Could not delete slot.", e);
+            throw new WebApplicationException(404);
+        }
+        return Response.ok().build();
+    }
 
-	@PUT
-	@Path("{id}/participants/user")
-	@Produces(HalMediaTypes.HAL_JSON)
-	public Response register(@PathParam("id") int id) {
-		Slot slot = slotManager.findSlot(id);
-		if (null == slot) {
-			LOGGER.error("Could not reserve slot.");
-			throw new WebApplicationException(404);
-		}
-		User user = getCurrentUser();
-		slot = reservationManager.createReservation(user, slot);
-		return Response.ok().entity(createSlotRepresentation(slot)).build();
-	}
+    @GET
+    @Path("{id}/participants")
+    @Produces(HalMediaTypes.HAL_JSON)
+    public Response getParticipants(@PathParam("id") int id) {
+        Slot slot = slotManager.findSlot(id);
+        if (null == slot) {
+            throw new WebApplicationException(404);
+        }
+        Representation participantsRepresentation =
+                slotMapper.createParticipantsRepresentation(uriInfo.getBaseUri(), slot, true);
+        return Response.ok().entity(participantsRepresentation).build();
+    }
 
-	private User getCurrentUser() {
-		return userManager.findUser(securityContext.getUserPrincipal().getName());
-	}
+    @PUT
+    @Path("{id}/participants/user")
+    @Produces(HalMediaTypes.HAL_JSON)
+    public Response register(@PathParam("id") int id) {
+        Slot slot = slotManager.findSlot(id);
+        if (null == slot) {
+            LOGGER.error("Could not reserve slot.");
+            throw new WebApplicationException(404);
+        }
+        User user = getCurrentUser();
+        slot = reservationManager.createReservation(user, slot);
+        return Response.ok().entity(createSlotRepresentation(slot)).build();
+    }
 
-	@DELETE
-	@Path("{id}/participants/user")
-	@Produces(HalMediaTypes.HAL_JSON)
-	public Response unregister(@PathParam("id") int id) {
-		Slot slot = slotManager.findSlot(id);
-		if (null == slot) {
-			LOGGER.error("Could not cancel reservation for slot.");
-			throw new WebApplicationException(404);
-		}
-		User user = getCurrentUser();
-		reservationManager.cancelReservation(user, slot);
-		return Response.ok().entity(createSlotRepresentation(slot)).build();
-	}
+    private User getCurrentUser() {
+        return userManager.findUser(securityContext.getUserPrincipal().getName());
+    }
 
-	private Representation createSlotRepresentation(Slot slot) {
-		return slotMapper.createRepresentation(uriInfo.getBaseUri(), slot, true, true);
-	}
+    @DELETE
+    @Path("{id}/participants/user")
+    @Produces(HalMediaTypes.HAL_JSON)
+    public Response unregister(@PathParam("id") int id) {
+        Slot slot = slotManager.findSlot(id);
+        if (null == slot) {
+            LOGGER.error("Could not cancel reservation for slot.");
+            throw new WebApplicationException(404);
+        }
+        User user = getCurrentUser();
+        reservationManager.cancelReservation(user, slot);
+        return Response.ok().entity(createSlotRepresentation(slot)).build();
+    }
 
-	private URI getSelfUri(Representation slotRepresentation) {
-		return URI.create(slotRepresentation.getLinkByRel("self").getHref());
-	}
+    private Representation createSlotRepresentation(Slot slot) {
+        return slotMapper.createRepresentation(uriInfo.getBaseUri(), slot, true, true);
+    }
+
+    private URI getSelfUri(Representation slotRepresentation) {
+        return URI.create(slotRepresentation.getLinkByRel("self").getHref());
+    }
 }

@@ -7,6 +7,7 @@ import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
 import de.saxsys.campus.rest.auth.AuthenticationFilter;
+import de.saxsys.campus.rest.auth.CorsFilter;
 import de.saxsys.campus.rest.hal.HalBuilderMessageBodyReader;
 import de.saxsys.campus.rest.hal.HalBuilderMessageBodyWriter;
 import de.saxsys.campus.rest.mapping.exception.DefaultExceptionMapper;
@@ -29,10 +30,18 @@ public class CampusApplication extends Application {
 		classes.add(HalBuilderMessageBodyReader.class);
 		classes.add(HalBuilderMessageBodyWriter.class);
 		classes.add(AuthenticationFilter.class);
+		classes.add(CorsFilter.class);
 		classes.add(WebApplicationExceptionMapper.class);
 		classes.add(DefaultExceptionMapper.class);
 		// classes.add(RolesAllowedDynamicFeature.class);
 		return classes;
 	}
+
+	// @Override
+	// public Map<String, Object> getProperties() {
+	// Map<String, Object> properties = new HashMap<>();
+	// properties.put(", value)
+	// return super.getProperties();
+	// }
 
 }
