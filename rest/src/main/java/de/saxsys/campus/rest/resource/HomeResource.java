@@ -15,20 +15,15 @@ import javax.ws.rs.core.UriInfo;
 
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 
+import de.saxsys.campus.rest.LinkRelations;
 import de.saxsys.campus.rest.hal.HalMediaTypes;
 
 @RequestScoped
 @Path("/")
 public class HomeResource {
 
-    private static final String SLOTS = "c:slots";
-    private static final String CURRENTUSER = "c:currentUser";
-
-    /** home may be cached for five minutes */
-    private static final int MAX_AGE_SECONDS = 300;
-
     @Inject
-    private RepresentationFactory representationFactory;
+    private RepresentationFactory rf;
 
     @Context
     private UriInfo uriInfo;
@@ -38,19 +33,21 @@ public class HomeResource {
     public Response getHome() {
         URI baseUri = uriInfo.getBaseUri();
         return Response.ok(
-                representationFactory
-                        .newRepresentation(baseUri)
-                        .withLink(SLOTS, UriBuilder.fromUri(baseUri).path(SlotResource.class).build())
-                        .withNamespace("c", "http://localhost:8080/rest-docs/{rel}")
-                        .withLink(CURRENTUSER,
-                                UriBuilder.fromUri(baseUri).path(UserResource.class).path("current").build()))
-        // .cacheControl(defaultCacheControl()) // TODO Caching
-                .build();
+                rf.newRepresentation(baseUri)
+                        .withLink(
+                                LinkRelations.REL_SEARCH,
+                                UriBuilder.fromUri(baseUri).path(BookResource.class).replaceQuery("q").build()
+                                        .toString()
+                                        + "={query}")
+                        .withNamespace(LinkRelations.NAMESPACE, LinkRelations.NAMESPACE_HREF))
+
+        .build();
     }
 
+    // .cacheControl(defaultCacheControl()) // TODO Caching
     private CacheControl defaultCacheControl() {
         CacheControl cc = new CacheControl();
-        cc.setMaxAge(MAX_AGE_SECONDS);
+        cc.setMaxAge(300);
         return cc;
     }
 }

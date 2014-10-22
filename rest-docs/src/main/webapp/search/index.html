@@ -21,26 +21,30 @@
   <body role="document">
   	<div class="container" role="main">
 	  	<div class="page-header">
-	        <h1>currentUser</h1>
+	        <h1>search</h1>
 	    </div>
 	    <h4>
 	      <span class="label label-primary">GET</span>
 	    </h4>
-	    <div class="well">Returns information about the current user. That is the user
-	    who is identified by the username given in the Authorization header.</div>
+	    <div class="well">Search for books. Queries the title and author fields.</div>
 	    <h4>Headers</h4>
 	    <table class="table">
             <tbody>
-              <tr>
-                <td>Authorization</td>
-                <td>HTTP Basic</td>
-              </tr>
               <tr>
                 <td>Accept</td>
                 <td>application/hal+json</td>
               </tr>
             </tbody>
-          </table>
+        </table>
+        <h4>Params</h4>
+	    <table class="table">
+            <tbody>
+              <tr>
+                <td>query</td>
+                <td>Query string</td>
+              </tr>
+            </tbody>
+         </table>
 	</div>
 	
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

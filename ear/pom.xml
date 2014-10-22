@@ -1,140 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>de.saxsys.hypermedia</groupId>
-		<artifactId>parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>de.saxsys.hypermedia</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-	<artifactId>ear</artifactId>
-	<packaging>ear</packaging>
+    <artifactId>ear</artifactId>
+    <packaging>ear</packaging>
 
-	<name>Saxonia Campus EAR</name>
+    <name>Library EAR</name>
 
-	<properties>
-		<wildfly.version>8.1.0.Final</wildfly.version>
-	</properties>
-
-	<dependencies>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>business</artifactId>
-			<version>${project.version}</version>
-			<type>ejb</type>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>rest</artifactId>
-			<version>${project.version}</version>
-			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>rest-docs</artifactId>
-			<version>${project.version}</version>
-			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>web</artifactId>
-			<version>${project.version}</version>
-			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.30</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-ear-plugin</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>rest</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>rest-docs</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-ear-plugin</artifactId>
                 <version>2.9</version>
-				<configuration>
-					<version>7</version>
-					<defaultLibBundleDir>lib</defaultLibBundleDir>
-					<skinnyWars>true</skinnyWars>
-					<modules>
-						<ejbModule>
-							<groupId>${project.groupId}</groupId>
-							<artifactId>business</artifactId>
-						</ejbModule>
-					</modules>
-					<!-- <modules> -->
-					<!-- <webModule> -->
-					<!-- <groupId>${project.groupId}</groupId> -->
-					<!-- <artifactId>rest</artifactId> -->
-					<!-- </webModule> -->
-					<!-- </modules> -->
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.wildfly.plugins</groupId>
-				<artifactId>wildfly-maven-plugin</artifactId>
-				<version>1.0.2.Final</version>
-				<executions>
-					<!-- Start the server -->
-					<!-- <execution> -->
-					<!-- <id>start-server</id> -->
-					<!-- <phase>pre-integration-test</phase> -->
-					<!-- <goals> -->
-					<!-- <goal>start</goal> -->
-					<!-- </goals> -->
-					<!-- </execution> -->
-					<execution>
-						<id>deploy-driver</id>
-						<phase>pre-integration-test</phase>
-						<configuration>
-							<groupId>mysql</groupId>
-							<artifactId>mysql-connector-java</artifactId>
-							<version>5.1.30</version>
-							<name>mysql-connector-java-5.1.30.jar</name>
-						</configuration>
-						<goals>
-							<goal>deploy-artifact</goal>
-						</goals>
-					</execution>
-					<!-- Add a data source -->
-					<execution>
-						<id>add-datasource</id>
-						<phase>pre-integration-test</phase>
-						<configuration>
-							<address>subsystem=datasources,data-source=campus</address>
-							<resources>
-								<resource>
-									<properties>
-										<jndi-name>java:jboss/datasources/campus</jndi-name>
-										<enabled>true</enabled>
-										<jta>true</jta>
-										<use-ccm>false</use-ccm>
-										<connection-url>jdbc:mysql://localhost:3306/campus</connection-url>
-										<driver-name>mysql-connector-java-5.1.30.jar_com.mysql.jdbc.Driver_5_1</driver-name>
-										<user-name>campus</user-name>
-										<password>campus</password>
-									</properties>
-								</resource>
-							</resources>
-						</configuration>
-						<goals>
-							<goal>add-resource</goal>
-						</goals>
-					</execution>
-					<!-- Deploy the application -->
-					<execution>
-						<id>deploy</id>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>deploy</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+                <configuration>
+                    <version>7</version>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <skinnyWars>true</skinnyWars>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>1.0.2.Final</version>
+                <executions>
+                    <!-- Deploy the application -->
+                    <execution>
+                        <id>deploy</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
