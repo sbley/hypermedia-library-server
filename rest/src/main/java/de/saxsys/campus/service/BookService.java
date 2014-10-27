@@ -62,4 +62,26 @@ public class BookService {
         return books.get(id);
     }
 
+    public Book lend(int bookId, int memberId) throws AlreadyLentException {
+        Book book = books.get(bookId);
+        if (null != book) {
+            if (book.isLent() && book.getBorrower() != memberId)
+                throw new AlreadyLentException(book.getBorrower());
+            else
+                book.lendTo(memberId);
+        }
+        return book;
+    }
+
+    public Book takeBack(int bookId, int memberId) throws NotLentException {
+        Book book = books.get(bookId);
+        if (null != book) {
+            if (book.getBorrower() != memberId) {
+                throw new NotLentException(memberId);
+            } else
+                book.takeBack();
+        }
+        return book;
+    }
+
 }

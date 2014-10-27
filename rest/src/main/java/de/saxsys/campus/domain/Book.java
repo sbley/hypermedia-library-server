@@ -6,6 +6,7 @@ public class Book {
     private String title;
     private String author;
     private String description;
+    private int borrower;
 
     public Book(int id, String title, String author, String description) {
         this.id = id;
@@ -36,5 +37,21 @@ public class Book {
 
     public boolean matchesAuthor(String query) {
         return author.toLowerCase().contains(query.toLowerCase());
+    }
+
+    public void lendTo(int memberId) {
+        this.borrower = memberId;
+    }
+
+    public boolean isLent() {
+        return borrower > 0;
+    }
+
+    public int getBorrower() {
+        return borrower;
+    }
+
+    public void takeBack() {
+        this.borrower = 0;
     }
 }
