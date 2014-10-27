@@ -58,4 +58,8 @@ public class BookService {
         return result;
     }
 
+    public Book get(int id) {
+        return books.get(id);
+    }
+
 }
