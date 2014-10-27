@@ -36,7 +36,7 @@
 			<tbody>
 				<tr>
 					<td class="col-md-3"><code>query</code></td>
-					<td>Query string</td>
+					<td>query string</td>
 				</tr>
 			</tbody>
 		</table>
@@ -49,6 +49,33 @@
 				</tr>
 			</tbody>
 		</table>
+		<h4>Links</h4>
+		<table class="table">
+			<tbody>
+				<tr>
+					<td class="col-md-3"><a href="../book">book</a></td>
+					<td>array of books (search result) <span class="label label-default">required</span></td>
+				</tr>
+			</tbody>
+		</table>
+		<h4>Embedded resources</h4>
+		<pre>
+_embedded: {
+	lib:book: [1]
+	0:  {
+		_links: {
+			self: {
+				href: "http://localhost:8080/rest/books/3"
+			}
+		}
+		id: 3
+		title: "The Second Half"
+		author: "Roy Keane"
+		description: "In an eighteen-year playing career for Cobh Ramblers, Nottingham Forest..."
+		borrower: 0
+		lent: false
+	}
+}		</pre>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

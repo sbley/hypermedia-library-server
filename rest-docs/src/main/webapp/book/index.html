@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Library docs - Relation 'return'</title>
+<title>Library docs - Relation 'book'</title>
 
 <!-- Bootstrap -->
 <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -15,12 +15,12 @@
 <body role="document">
 	<div class="container" role="main">
 		<div class="page-header">
-			<h1>return</h1>
+			<h1>book</h1>
 		</div>
 		<h4>
-			<span class="label label-primary">DELETE</span>
+			<span class="label label-primary">GET</span>
 		</h4>
-		<div class="well">Return the book from a member.</div>
+		<div class="well">Returns a book.</div>
 		<h4>Headers</h4>
 		<table class="table">
 			<tbody>
@@ -30,28 +30,44 @@
 				</tr>
 			</tbody>
 		</table>
-		<h4>Template params</h4>
-		<table class="table">
-			<tbody>
-				<tr>
-					<td class="col-md-3"><code>memberId</code></td>
-					<td>ID of the member who wants to return the book</td>
-				</tr>
-			</tbody>
-		</table>
 		<h4>Response codes</h4>
 		<table class="table">
 			<tbody>
 				<tr>
 					<td class="col-md-3">200</td>
-					<td>if successful</td>
+					<td>usually</td>
 				</tr>
 				<tr>
 					<td class="col-md-3">404</td>
-					<td>if book is not lent to this member</td>
+					<td>if resource does not exist</td>
 				</tr>
 			</tbody>
 		</table>
+		<h4>Links</h4>
+		<table class="table">
+			<tbody>
+				<tr>
+					<td class="col-md-3"><a href="../lend">lend</a></td>
+					<td>lend the book to a member <span
+						class="label label-default">optional</span></td>
+				</tr>
+				<tr>
+					<td class="col-md-3"><a href="../return">return</a></td>
+					<td>return the book from a member <span
+						class="label label-default">optional</span></td>
+				</tr>
+			</tbody>
+		</table>
+		<h4>State</h4>
+		<pre>
+{
+	id: 3
+	title: "The Second Half"
+	author: "Roy Keane"
+	description: "In an eighteen-year playing career for Cobh Ramblers, Nottingham Forest..."
+	borrower: 0
+	lent: false
+}		</pre>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
