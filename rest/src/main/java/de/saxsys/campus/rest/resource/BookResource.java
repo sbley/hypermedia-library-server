@@ -66,9 +66,11 @@ public class BookResource {
             throw new WebApplicationException(404);
         }
         Representation rep =
-                rf.newRepresentation(uriInfo.getRequestUri()).withBean(book)
+                rf.newRepresentation(uriInfo.getRequestUri())
+                        .withBean(book)
                         .withNamespace(LinkRelations.NAMESPACE, LinkRelations.NAMESPACE_HREF)
-                        .withLink(LinkRelations.REL_LEND, uriInfo.getRequestUri().toString() + "/borrower/{memberId}");
+                        .withLink(LinkRelations.REL_LEND, uriInfo.getRequestUri().toString() + "/borrower/{memberId}")
+                        .withLink(LinkRelations.REL_RETURN, uriInfo.getRequestUri().toString() + "/borrower/{memberId}");
         return Response.ok(rep).build();
     }
 

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Library docs - Relation 'search'</title>
+<title>Library docs - Relation 'return'</title>
 
 <!-- Bootstrap -->
 <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -15,13 +15,12 @@
 <body role="document">
 	<div class="container" role="main">
 		<div class="page-header">
-			<h1>search</h1>
+			<h1>return</h1>
 		</div>
 		<h4>
-			<span class="label label-primary">GET</span>
+			<span class="label label-primary">DELETE</span>
 		</h4>
-		<div class="well">Search for books. Title and author field will
-			be queried.</div>
+		<div class="well">Return the book from a member.</div>
 		<h4>Headers</h4>
 		<table class="table">
 			<tbody>
@@ -35,17 +34,20 @@
 		<table class="table">
 			<tbody>
 				<tr>
-					<td>query</td>
-					<td>Query string</td>
+					<td>memberId</td>
+					<td>ID of the member who wants to return the book</td>
 				</tr>
 			</tbody>
 		</table>
-		<h4>Response codes</h4>
 		<table class="table">
 			<tbody>
 				<tr>
 					<td>200</td>
-					<td>always (except for server errors)</td>
+					<td>if successful</td>
+				</tr>
+				<tr>
+					<td>404</td>
+					<td>if book is not lent to this member</td>
 				</tr>
 			</tbody>
 		</table>
