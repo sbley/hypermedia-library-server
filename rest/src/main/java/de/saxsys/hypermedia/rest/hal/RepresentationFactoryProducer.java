@@ -1,4 +1,4 @@
-package de.saxsys.campus.rest.hal;
+package de.saxsys.hypermedia.rest.hal;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
@@ -9,8 +9,8 @@ import com.theoryinpractise.halbuilder.json.JsonRepresentationFactory;
 @Singleton
 public class RepresentationFactoryProducer {
 
-	@Produces
-	public RepresentationFactory jsonRepresentationFactory() {
-		return new JsonRepresentationFactory().withFlag(RepresentationFactory.PRETTY_PRINT);
-	}
+    @Produces
+    public RepresentationFactory jsonRepresentationFactory() {
+        return new JsonRepresentationFactory().withFlag(RepresentationFactory.PRETTY_PRINT);
+    }
 }

@@ -1,4 +1,4 @@
-package de.saxsys.campus.rest;
+package de.saxsys.hypermedia.rest;
 
 public final class LinkRelations {
 

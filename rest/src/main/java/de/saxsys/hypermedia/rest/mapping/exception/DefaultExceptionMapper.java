@@ -1,4 +1,4 @@
-package de.saxsys.campus.rest.mapping.exception;
+package de.saxsys.hypermedia.rest.mapping.exception;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
@@ -7,7 +7,7 @@ import javax.ws.rs.ext.Provider;
 
 import com.theoryinpractise.halbuilder.api.Representation;
 
-import de.saxsys.campus.rest.mapping.ErrorMapper;
+import de.saxsys.hypermedia.rest.mapping.ErrorMapper;
 
 @Provider
 public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {

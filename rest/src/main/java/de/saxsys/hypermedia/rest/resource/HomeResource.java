@@ -1,4 +1,4 @@
-package de.saxsys.campus.rest.resource;
+package de.saxsys.hypermedia.rest.resource;
 
 import java.net.URI;
 
@@ -15,8 +15,8 @@ import javax.ws.rs.core.UriInfo;
 
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 
-import de.saxsys.campus.rest.LinkRelations;
-import de.saxsys.campus.rest.hal.HalMediaTypes;
+import de.saxsys.hypermedia.rest.LinkRelations;
+import de.saxsys.hypermedia.rest.hal.HalMediaTypes;
 
 @RequestScoped
 @Path("/")

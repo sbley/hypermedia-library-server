@@ -1,4 +1,4 @@
-package de.saxsys.campus.service;
+package de.saxsys.hypermedia.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +8,8 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
-import de.saxsys.campus.domain.Book;
+import de.saxsys.hypermedia.domain.Book;
+import de.saxsys.hypermedia.domain.Member;
 
 @ApplicationScoped
 public class BookService {
@@ -62,22 +63,22 @@ public class BookService {
         return books.get(id);
     }
 
-    public Book lend(int bookId, int memberId) throws AlreadyLentException {
+    public Book lend(int bookId, Member member) throws AlreadyLentException {
         Book book = books.get(bookId);
         if (null != book) {
-            if (book.isLent() && book.getBorrower() != memberId)
-                throw new AlreadyLentException(book.getBorrower());
+            if (book.isLent() && book.getBorrower() != member)
+                throw new AlreadyLentException(book.getBorrower().getId());
             else
-                book.lendTo(memberId);
+                book.lendTo(member);
         }
         return book;
     }
 
-    public Book takeBack(int bookId, int memberId) throws NotLentException {
+    public Book takeBack(int bookId, Member member) throws NotLentException {
         Book book = books.get(bookId);
         if (null != book) {
-            if (book.getBorrower() != memberId) {
-                throw new NotLentException(memberId);
+            if (book.getBorrower() != member) {
+                throw new NotLentException(member.getId());
             } else
                 book.takeBack();
         }

@@ -1,4 +1,4 @@
-package de.saxsys.campus.rest.hal;
+package de.saxsys.hypermedia.rest.hal;
 
 import javax.ws.rs.core.MediaType;
 

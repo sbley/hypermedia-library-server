@@ -1,4 +1,4 @@
-package de.saxsys.campus.rest.resource;
+package de.saxsys.hypermedia.rest.resource;
 
 import java.net.URI;
 import java.util.List;
@@ -21,13 +21,15 @@ import javax.ws.rs.core.UriInfo;
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 
-import de.saxsys.campus.domain.Book;
-import de.saxsys.campus.rest.LinkRelations;
-import de.saxsys.campus.rest.hal.HalMediaTypes;
-import de.saxsys.campus.rest.mapping.ErrorMapper;
-import de.saxsys.campus.service.AlreadyLentException;
-import de.saxsys.campus.service.BookService;
-import de.saxsys.campus.service.NotLentException;
+import de.saxsys.hypermedia.domain.Book;
+import de.saxsys.hypermedia.domain.Member;
+import de.saxsys.hypermedia.rest.LinkRelations;
+import de.saxsys.hypermedia.rest.hal.HalMediaTypes;
+import de.saxsys.hypermedia.rest.mapping.ErrorMapper;
+import de.saxsys.hypermedia.service.AlreadyLentException;
+import de.saxsys.hypermedia.service.BookService;
+import de.saxsys.hypermedia.service.MemberService;
+import de.saxsys.hypermedia.service.NotLentException;
 
 @RequestScoped
 @Path("books")
@@ -43,6 +45,9 @@ public class BookResource {
     private BookService bookService;
 
     @Inject
+    private MemberService memberService;
+
+    @Inject
     private ErrorMapper errorMapper;
 
     @GET
@@ -52,7 +57,7 @@ public class BookResource {
         rep.withNamespace(LinkRelations.NAMESPACE, LinkRelations.NAMESPACE_HREF);
         List<Book> books = bookService.find(query);
         for (Book b : books) {
-            rep.withRepresentation(LinkRelations.REL_BOOK, rf.newRepresentation(createUri(b)).withBean(b));
+            rep.withBeanBasedRepresentation(LinkRelations.REL_BOOK, createUri(b).toString(), b);
         }
         return Response.ok(rep).build();
     }
@@ -65,12 +70,7 @@ public class BookResource {
         if (null == book) {
             throw new WebApplicationException(404);
         }
-        Representation rep =
-                rf.newRepresentation(uriInfo.getRequestUri())
-                        .withBean(book)
-                        .withNamespace(LinkRelations.NAMESPACE, LinkRelations.NAMESPACE_HREF)
-                        .withLink(LinkRelations.REL_LEND, uriInfo.getRequestUri().toString() + "/borrower/{memberId}")
-                        .withLink(LinkRelations.REL_RETURN, uriInfo.getRequestUri().toString() + "/borrower/{memberId}");
+        Representation rep = createRep(book);
         return Response.ok(rep).build();
     }
 
@@ -80,11 +80,15 @@ public class BookResource {
     public Response lend(@PathParam("bookId") int bookId, @PathParam("memberId") int memberId) {
         Book book;
         try {
-            book = bookService.lend(bookId, memberId);
-            if (null == book) {
+            Member member = memberService.get(memberId);
+            if (null == member)
                 throw new WebApplicationException(404);
-            }
-            Representation rep = rf.newRepresentation(uriInfo.getRequestUri()).withBean(book);
+
+            book = bookService.lend(bookId, member);
+            if (null == book)
+                throw new WebApplicationException(404);
+
+            Representation rep = createRep(book);
             return Response.ok(rep).build();
         } catch (AlreadyLentException e) {
             return Response.status(409).entity(errorMapper.createRepresentation("Unable to lend book", e)).build();
@@ -97,11 +101,15 @@ public class BookResource {
     public Response takeBack(@PathParam("bookId") int bookId, @PathParam("memberId") int memberId) {
         Book book;
         try {
-            book = bookService.takeBack(bookId, memberId);
-            if (null == book) {
+            Member member = memberService.get(memberId);
+            if (null == member)
                 throw new WebApplicationException(404);
-            }
-            Representation rep = rf.newRepresentation(uriInfo.getRequestUri()).withBean(book);
+
+            book = bookService.takeBack(bookId, member);
+            if (null == book)
+                throw new WebApplicationException(404);
+
+            Representation rep = createRep(book);
             return Response.ok(rep).build();
         } catch (NotLentException e) {
             return Response.status(404).entity(errorMapper.createRepresentation("Unable to return book", e)).build();
@@ -110,5 +118,24 @@ public class BookResource {
 
     private URI createUri(Book book) {
         return UriBuilder.fromUri(uriInfo.getBaseUri()).path(BookResource.class).path("{id}").build(book.getId());
+    }
+
+    private Representation createRep(Book book) {
+        Representation rep =
+                rf.newRepresentation(createUri(book))
+                        .withProperty("id", book.getId())
+                        .withProperty("title", book.getTitle())
+                        .withProperty("author", book.getAuthor())
+                        .withProperty("description", book.getDescription());
+        rep.withNamespace(LinkRelations.NAMESPACE, LinkRelations.NAMESPACE_HREF)
+                .withLink(LinkRelations.REL_LEND, createUri(book).toString() + "/borrower/{memberId}")
+                .withLink(LinkRelations.REL_RETURN, createUri(book).toString() + "/borrower/{memberId}");
+        if (book.isLent())
+            rep.withRepresentation("borrower", createRep(book.getBorrower()));
+        return rep;
+    }
+
+    private Representation createRep(Member member) {
+        return rf.newRepresentation().withBean(member);
     }
 }

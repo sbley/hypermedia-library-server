@@ -1,8 +1,8 @@
-package de.saxsys.campus.rest.hal;
+package de.saxsys.hypermedia.rest.hal;
 
-import static de.saxsys.campus.rest.hal.HalMediaTypes.HAL_JSON;
-import static de.saxsys.campus.rest.hal.HalMediaTypes.HAL_JSON_TYPE;
-import static de.saxsys.campus.rest.hal.HalMediaTypes.HAL_XML_TYPE;
+import static de.saxsys.hypermedia.rest.hal.HalMediaTypes.HAL_JSON;
+import static de.saxsys.hypermedia.rest.hal.HalMediaTypes.HAL_JSON_TYPE;
+import static de.saxsys.hypermedia.rest.hal.HalMediaTypes.HAL_XML_TYPE;
 
 import java.io.IOException;
 import java.io.InputStream;

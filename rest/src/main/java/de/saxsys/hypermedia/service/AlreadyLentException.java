@@ -1,4 +1,4 @@
-package de.saxsys.campus.service;
+package de.saxsys.hypermedia.service;
 
 public class AlreadyLentException extends Exception {
 

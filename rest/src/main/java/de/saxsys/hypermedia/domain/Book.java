@@ -1,4 +1,4 @@
-package de.saxsys.campus.domain;
+package de.saxsys.hypermedia.domain;
 
 public class Book {
 
@@ -6,7 +6,7 @@ public class Book {
     private String title;
     private String author;
     private String description;
-    private int borrower;
+    private Member borrower;
 
     public Book(int id, String title, String author, String description) {
         this.id = id;
@@ -39,19 +39,19 @@ public class Book {
         return author.toLowerCase().contains(query.toLowerCase());
     }
 
-    public void lendTo(int memberId) {
-        this.borrower = memberId;
+    public void lendTo(Member member) {
+        this.borrower = member;
     }
 
     public boolean isLent() {
-        return borrower > 0;
+        return null != borrower;
     }
 
-    public int getBorrower() {
+    public Member getBorrower() {
         return borrower;
     }
 
     public void takeBack() {
-        this.borrower = 0;
+        this.borrower = null;
     }
 }

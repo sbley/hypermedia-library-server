@@ -1,4 +1,4 @@
-package de.saxsys.campus.rest.auth;
+package de.saxsys.hypermedia.rest.auth;
 
 import java.io.IOException;
 import java.util.Arrays;
