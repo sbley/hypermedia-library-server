@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -36,18 +35,13 @@ public class HomeResource {
                 rf.newRepresentation(baseUri)
                         .withLink(
                                 LinkRelations.REL_SEARCH,
-                                UriBuilder.fromUri(baseUri).path(BookResource.class).replaceQuery("q").build()
+                                UriBuilder.fromUri(baseUri)
+                                        .path(BookResource.class)
+                                        .build()
                                         .toString()
-                                        + "={query}")
+                                        + "?q={query}")
                         .withNamespace(LinkRelations.NAMESPACE, LinkRelations.NAMESPACE_HREF))
 
         .build();
-    }
-
-    // .cacheControl(defaultCacheControl()) // TODO Caching
-    private CacheControl defaultCacheControl() {
-        CacheControl cc = new CacheControl();
-        cc.setMaxAge(300);
-        return cc;
     }
 }

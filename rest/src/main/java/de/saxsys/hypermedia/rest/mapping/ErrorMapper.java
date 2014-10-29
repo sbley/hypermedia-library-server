@@ -17,8 +17,9 @@ public class ErrorMapper {
     }
 
     public Representation createRepresentation(String message, String detail) {
-        return rf
-                .newRepresentation().withProperty("status", "error").withProperty("title", message)
+        return rf.newRepresentation()
+                .withProperty("status", "error")
+                .withProperty("title", message)
                 .withProperty("detail", detail);
     }
 }

@@ -17,7 +17,8 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 
     @Override
     public Response toResponse(final Throwable throwable) {
-        final Representation representation = errorMapper.createRepresentation("Server Error", throwable);
+        final Representation representation =
+                errorMapper.createRepresentation("Server Error", throwable);
         return Response.status(500).entity(representation).build();
     }
 }

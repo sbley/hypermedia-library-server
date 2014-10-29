@@ -20,13 +20,15 @@ public class LibraryApplication extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<>();
+        // Resources
         classes.add(HomeResource.class);
         classes.add(BookResource.class);
+        // Providers
         classes.add(HalBuilderMessageBodyReader.class);
         classes.add(HalBuilderMessageBodyWriter.class);
-        classes.add(CorsFilter.class);
         classes.add(WebApplicationExceptionMapper.class);
         classes.add(DefaultExceptionMapper.class);
+        classes.add(CorsFilter.class);
         return classes;
     }
 }

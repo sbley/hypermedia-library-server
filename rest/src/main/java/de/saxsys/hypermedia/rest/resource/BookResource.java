@@ -86,14 +86,16 @@ public class BookResource {
         Integer memberId = HalUtil.toInt(repMember.getValue("memberId", null));
         if (null == memberId)
             return Response.status(400)
-                    .entity(errorMapper.createRepresentation("Unable to lend book", "Parameter memberId missing"))
+                    .entity(errorMapper.createRepresentation("Unable to lend book",
+                            "Parameter memberId missing"))
                     .build();
 
         // check memberId
         Member member = memberService.get(memberId);
         if (null == member)
             return Response.status(400)
-                    .entity(errorMapper.createRepresentation("Unable to lend book", "Unknown memberId"))
+                    .entity(errorMapper.createRepresentation("Unable to lend book",
+                            "Unknown memberId"))
                     .build();
 
         // check book
@@ -102,12 +104,15 @@ public class BookResource {
             book = bookService.lend(bookId, member);
             if (null == book)
                 return Response.status(404)
-                        .entity(errorMapper.createRepresentation("Unable to lend book", "Unknown book"))
+                        .entity(errorMapper.createRepresentation("Unable to lend book",
+                                "Unknown book"))
                         .build();
 
             return Response.ok(createRep(book)).build();
         } catch (AlreadyLentException e) {
-            return Response.status(409).entity(errorMapper.createRepresentation("Unable to lend book", e)).build();
+            return Response.status(409)
+                    .entity(errorMapper.createRepresentation("Unable to lend book", e))
+                    .build();
         }
     }
 
@@ -120,17 +125,23 @@ public class BookResource {
             book = bookService.takeBack(bookId);
             if (null == book)
                 return Response.status(404)
-                        .entity(errorMapper.createRepresentation("Unable to return book", "Unknown book"))
+                        .entity(errorMapper.createRepresentation("Unable to return book",
+                                "Unknown book"))
                         .build();
 
             return Response.ok(createRep(book)).build();
         } catch (NotLentException e) {
-            return Response.status(404).entity(errorMapper.createRepresentation("Unable to return book", e)).build();
+            return Response.status(404)
+                    .entity(errorMapper.createRepresentation("Unable to return book", e))
+                    .build();
         }
     }
 
     private URI createUri(Book book) {
-        return UriBuilder.fromUri(uriInfo.getBaseUri()).path(BookResource.class).path("{id}").build(book.getId());
+        return UriBuilder.fromUri(uriInfo.getBaseUri())
+                .path(BookResource.class)
+                .path("{id}")
+                .build(book.getId());
     }
 
     private Representation createRep(Book book) {
