@@ -60,7 +60,7 @@ public class BookResource {
         rep.withNamespace(LinkRelations.NAMESPACE, LinkRelations.NAMESPACE_HREF);
         List<Book> books = bookService.find(query);
         for (Book b : books) {
-            rep.withBeanBasedRepresentation(LinkRelations.REL_BOOK, createUri(b).toString(), b);
+            rep.withRepresentation(LinkRelations.REL_BOOK, createLinkOnlyRep(b));
         }
         return Response.ok(rep).build();
     }
@@ -73,7 +73,7 @@ public class BookResource {
         if (null == book) {
             throw new WebApplicationException(404);
         }
-        return Response.ok(createRep(book)).build();
+        return Response.ok(createFullRep(book)).build();
     }
 
     @PUT
@@ -108,7 +108,7 @@ public class BookResource {
                                 "Unknown book"))
                         .build();
 
-            return Response.ok(createRep(book)).build();
+            return Response.ok(createFullRep(book)).build();
         } catch (AlreadyLentException e) {
             return Response.status(409)
                     .entity(errorMapper.createRepresentation("Unable to lend book", e))
@@ -129,7 +129,7 @@ public class BookResource {
                                 "Unknown book"))
                         .build();
 
-            return Response.ok(createRep(book)).build();
+            return Response.ok(createFullRep(book)).build();
         } catch (NotLentException e) {
             return Response.status(404)
                     .entity(errorMapper.createRepresentation("Unable to return book", e))
@@ -144,7 +144,11 @@ public class BookResource {
                 .build(book.getId());
     }
 
-    private Representation createRep(Book book) {
+    private Representation createLinkOnlyRep(Book book) {
+        return rf.newRepresentation(createUri(book));
+    }
+
+    private Representation createFullRep(Book book) {
         Representation rep =
                 rf.newRepresentation(createUri(book))
                         .withProperty("id", book.getId())
