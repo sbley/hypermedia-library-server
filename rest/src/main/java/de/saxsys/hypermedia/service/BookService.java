@@ -61,6 +61,20 @@ public class BookService {
                         "Mushrooms",
                         "Roger Phillips",
                         "The culmination of over thirty years' work, this authoritative and superbly illustrated reference work is packed with the most up-to-date information and original photographs. Set to become the essential illustrated mycological encyclopedia for the next 25 years, this book is also clear, user friendly and will appeal to a wide range of readers."));
+        books.put(
+                7,
+                new Book(
+                        7,
+                        "Just Bento Cookbook",
+                        "Makiko Itoh",
+                        "Bento fever is sweeping the world fuelled by its promise of superb food that is economical and healthy in these tough economic times. The Just Bento Cookbook contains 25 attractive bento menus and more than 150 recipes, all of which have been specially created for this book."));
+        books.put(
+                8,
+                new Book(
+                        8,
+                        "The Woman Who Stole My Life",
+                        "Marian Keyes",
+                        "One day, sitting in traffic, married Dublin mum Stella Sweeney attempts a good deed. The resulting car crash changes her life."));
     }
 
     public List<Book> find(String query) {
