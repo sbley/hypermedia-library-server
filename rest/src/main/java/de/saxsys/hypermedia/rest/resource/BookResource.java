@@ -61,7 +61,7 @@ public class BookResource {
         rep.withNamespace(LinkRelations.NAMESPACE, LinkRelations.NAMESPACE_HREF);
         List<Book> books = bookService.find(query);
         for (Book b : books) {
-            rep.withRepresentation(LinkRelations.REL_BOOK, createLinkOnlyRep(b));
+            rep.withRepresentation(LinkRelations.REL_BOOK, createSimpleRep(b));
         }
         return Response.ok(rep).build();
     }
@@ -147,6 +147,13 @@ public class BookResource {
 
     private Representation createLinkOnlyRep(Book book) {
         return rf.newRepresentation(createUri(book));
+    }
+
+    private Representation createSimpleRep(Book book) {
+        return rf.newRepresentation(createUri(book))
+                .withProperty("id", book.getId())
+                .withProperty("title", book.getTitle())
+                .withProperty("author", book.getAuthor());
     }
 
     private Representation createFullRep(Book book) {
