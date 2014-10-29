@@ -47,6 +47,20 @@ public class BookService {
                         "RESTful Web APIs",
                         "Leonard Richardson",
                         "The popularity of REST in recent years has led to tremendous growth in almost-RESTful APIs that don’t include many of the architecture’s benefits."));
+        books.put(
+                5,
+                new Book(
+                        5,
+                        "Lonely Planet Japan",
+                        "Lonely Planet",
+                        "Lonely Planet Japan is your passport to all the most relevant and up-to-date advice on what to see, what to skip, and what hidden discoveries await you."));
+        books.put(
+                6,
+                new Book(
+                        6,
+                        "Mushrooms",
+                        "Roger Phillips",
+                        "The culmination of over thirty years' work, this authoritative and superbly illustrated reference work is packed with the most up-to-date information and original photographs. Set to become the essential illustrated mycological encyclopedia for the next 25 years, this book is also clear, user friendly and will appeal to a wide range of readers."));
     }
 
     public List<Book> find(String query) {

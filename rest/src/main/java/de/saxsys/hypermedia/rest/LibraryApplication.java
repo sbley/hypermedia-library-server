@@ -6,7 +6,8 @@ import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
-import de.saxsys.hypermedia.rest.auth.CorsFilter;
+import de.saxsys.hypermedia.rest.filter.CorsFilter;
+import de.saxsys.hypermedia.rest.filter.LoggingFilter;
 import de.saxsys.hypermedia.rest.hal.HalBuilderMessageBodyReader;
 import de.saxsys.hypermedia.rest.hal.HalBuilderMessageBodyWriter;
 import de.saxsys.hypermedia.rest.mapping.exception.DefaultExceptionMapper;
@@ -28,6 +29,7 @@ public class LibraryApplication extends Application {
         classes.add(HalBuilderMessageBodyWriter.class);
         classes.add(WebApplicationExceptionMapper.class);
         classes.add(DefaultExceptionMapper.class);
+        classes.add(LoggingFilter.class);
         classes.add(CorsFilter.class);
         return classes;
     }
