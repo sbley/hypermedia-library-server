@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -14,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -25,6 +27,7 @@ import de.saxsys.hypermedia.domain.Book;
 import de.saxsys.hypermedia.domain.Member;
 import de.saxsys.hypermedia.rest.LinkRelations;
 import de.saxsys.hypermedia.rest.hal.HalMediaTypes;
+import de.saxsys.hypermedia.rest.hal.HalUtil;
 import de.saxsys.hypermedia.rest.mapping.ErrorMapper;
 import de.saxsys.hypermedia.service.AlreadyLentException;
 import de.saxsys.hypermedia.service.BookService;
@@ -70,26 +73,39 @@ public class BookResource {
         if (null == book) {
             throw new WebApplicationException(404);
         }
-        Representation rep = createRep(book);
-        return Response.ok(rep).build();
+        return Response.ok(createRep(book)).build();
     }
 
     @PUT
     @Produces(HalMediaTypes.HAL_JSON)
-    @Path("{bookId}/borrower/{memberId}")
-    public Response lend(@PathParam("bookId") int bookId, @PathParam("memberId") int memberId) {
+    @Consumes({HalMediaTypes.HAL_JSON, MediaType.APPLICATION_JSON })
+    @Path("{bookId}/borrower")
+    public Response lend(@PathParam("bookId") int bookId, Representation repMember) {
+
+        // check request data
+        Integer memberId = HalUtil.toInt(repMember.getValue("memberId", null));
+        if (null == memberId)
+            return Response.status(400)
+                    .entity(errorMapper.createRepresentation("Unable to lend book", "Parameter memberId missing"))
+                    .build();
+
+        // check memberId
+        Member member = memberService.get(memberId);
+        if (null == member)
+            return Response.status(400)
+                    .entity(errorMapper.createRepresentation("Unable to lend book", "Unknown memberId"))
+                    .build();
+
+        // check book
         Book book;
         try {
-            Member member = memberService.get(memberId);
-            if (null == member)
-                throw new WebApplicationException(404);
-
             book = bookService.lend(bookId, member);
             if (null == book)
-                throw new WebApplicationException(404);
+                return Response.status(404)
+                        .entity(errorMapper.createRepresentation("Unable to lend book", "Unknown book"))
+                        .build();
 
-            Representation rep = createRep(book);
-            return Response.ok(rep).build();
+            return Response.ok(createRep(book)).build();
         } catch (AlreadyLentException e) {
             return Response.status(409).entity(errorMapper.createRepresentation("Unable to lend book", e)).build();
         }
@@ -97,20 +113,17 @@ public class BookResource {
 
     @DELETE
     @Produces(HalMediaTypes.HAL_JSON)
-    @Path("{bookId}/borrower/{memberId}")
-    public Response takeBack(@PathParam("bookId") int bookId, @PathParam("memberId") int memberId) {
+    @Path("{bookId}/borrower")
+    public Response takeBack(@PathParam("bookId") int bookId) {
         Book book;
         try {
-            Member member = memberService.get(memberId);
-            if (null == member)
-                throw new WebApplicationException(404);
-
-            book = bookService.takeBack(bookId, member);
+            book = bookService.takeBack(bookId);
             if (null == book)
-                throw new WebApplicationException(404);
+                return Response.status(404)
+                        .entity(errorMapper.createRepresentation("Unable to return book", "Unknown book"))
+                        .build();
 
-            Representation rep = createRep(book);
-            return Response.ok(rep).build();
+            return Response.ok(createRep(book)).build();
         } catch (NotLentException e) {
             return Response.status(404).entity(errorMapper.createRepresentation("Unable to return book", e)).build();
         }
@@ -128,8 +141,8 @@ public class BookResource {
                         .withProperty("author", book.getAuthor())
                         .withProperty("description", book.getDescription());
         rep.withNamespace(LinkRelations.NAMESPACE, LinkRelations.NAMESPACE_HREF)
-                .withLink(LinkRelations.REL_LEND, createUri(book).toString() + "/borrower/{memberId}")
-                .withLink(LinkRelations.REL_RETURN, createUri(book).toString() + "/borrower/{memberId}");
+                .withLink(LinkRelations.REL_LEND, createUri(book).toString() + "/borrower")
+                .withLink(LinkRelations.REL_RETURN, createUri(book).toString() + "/borrower");
         if (book.isLent())
             rep.withRepresentation("borrower", createRep(book.getBorrower()));
         return rep;

@@ -74,11 +74,11 @@ public class BookService {
         return book;
     }
 
-    public Book takeBack(int bookId, Member member) throws NotLentException {
+    public Book takeBack(int bookId) throws NotLentException {
         Book book = books.get(bookId);
         if (null != book) {
-            if (book.getBorrower() != member) {
-                throw new NotLentException(member.getId());
+            if (!book.isLent()) {
+                throw new NotLentException();
             } else
                 book.takeBack();
         }

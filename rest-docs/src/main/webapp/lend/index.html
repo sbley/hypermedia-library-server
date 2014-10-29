@@ -28,23 +28,28 @@
 					<td class="col-md-3">Accept</td>
 					<td>application/hal+json</td>
 				</tr>
-			</tbody>
-		</table>
-		<h4>Template params</h4>
-		<table class="table">
-			<tbody>
 				<tr>
-					<td class="col-md-3"><code>memberId</code></td>
-					<td>ID of the member who wants to borrow the book</td>
+					<td class="col-md-3">Content-Type</td>
+					<td>application/hal+json or application/json</td>
 				</tr>
 			</tbody>
 		</table>
+		<h4>Request data</h4>
+		<pre>
+{
+	"memberId": "1"
+}
+		</pre>
 		<h4>Response codes</h4>
 		<table class="table">
 			<tbody>
 				<tr>
 					<td class="col-md-3">200</td>
 					<td>if successful</td>
+				</tr>
+				<tr>
+					<td class="col-md-3">404</td>
+					<td>if request data is invalid</td>
 				</tr>
 				<tr>
 					<td class="col-md-3">409</td>

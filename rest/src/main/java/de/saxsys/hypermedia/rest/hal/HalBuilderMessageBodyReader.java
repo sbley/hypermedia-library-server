@@ -2,7 +2,6 @@ package de.saxsys.hypermedia.rest.hal;
 
 import static de.saxsys.hypermedia.rest.hal.HalMediaTypes.HAL_JSON;
 import static de.saxsys.hypermedia.rest.hal.HalMediaTypes.HAL_JSON_TYPE;
-import static de.saxsys.hypermedia.rest.hal.HalMediaTypes.HAL_XML_TYPE;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,6 +42,6 @@ public class HalBuilderMessageBodyReader implements MessageBodyReader<ReadableRe
     }
 
     private boolean supportsMediaType(MediaType mediaType) {
-        return mediaType.isCompatible(HAL_JSON_TYPE) || mediaType.isCompatible(HAL_XML_TYPE);
+        return mediaType.isCompatible(HAL_JSON_TYPE) || mediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE);
     }
 }

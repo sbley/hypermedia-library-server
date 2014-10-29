@@ -1,7 +1,6 @@
 package de.saxsys.hypermedia.rest.hal;
 
 import static de.saxsys.hypermedia.rest.hal.HalMediaTypes.HAL_JSON_TYPE;
-import static de.saxsys.hypermedia.rest.hal.HalMediaTypes.HAL_XML_TYPE;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,28 +20,25 @@ import com.theoryinpractise.halbuilder.api.ReadableRepresentation;
 @Provider
 public class HalBuilderMessageBodyWriter implements MessageBodyWriter<ReadableRepresentation> {
 
-	@Override
-	public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations,
-			MediaType mediaType) {
-		return ReadableRepresentation.class.isAssignableFrom(type) && supportsMediaType(mediaType);
-	}
+    @Override
+    public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+        return ReadableRepresentation.class.isAssignableFrom(type) && supportsMediaType(mediaType);
+    }
 
-	@Override
-	public long getSize(ReadableRepresentation representation, Class<?> aClass, Type type,
-			Annotation[] annotations, MediaType mediaType) {
-		return representation.toString(mediaType.toString()).length();
-	}
+    @Override
+    public long getSize(ReadableRepresentation representation, Class<?> aClass, Type type, Annotation[] annotations,
+            MediaType mediaType) {
+        return representation.toString(mediaType.toString()).length();
+    }
 
-	@Override
-	public void writeTo(ReadableRepresentation representation, Class<?> aClass, Type type,
-			Annotation[] annotations, MediaType mediaType,
-			MultivaluedMap<String, Object> multivaluedMap, OutputStream outputStream)
-			throws IOException, WebApplicationException {
-		representation.toString(mediaType.toString(),
-				new OutputStreamWriter(outputStream, Charset.forName("utf-8")));
-	}
+    @Override
+    public void writeTo(ReadableRepresentation representation, Class<?> aClass, Type type, Annotation[] annotations,
+            MediaType mediaType, MultivaluedMap<String, Object> multivaluedMap, OutputStream outputStream)
+        throws IOException, WebApplicationException {
+        representation.toString(mediaType.toString(), new OutputStreamWriter(outputStream, Charset.forName("utf-8")));
+    }
 
-	private boolean supportsMediaType(MediaType mediaType) {
-		return mediaType.isCompatible(HAL_JSON_TYPE) || mediaType.isCompatible(HAL_XML_TYPE);
-	}
+    private boolean supportsMediaType(MediaType mediaType) {
+        return mediaType.isCompatible(HAL_JSON_TYPE);
+    }
 }
