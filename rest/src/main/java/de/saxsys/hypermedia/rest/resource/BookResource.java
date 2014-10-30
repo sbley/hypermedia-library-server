@@ -18,7 +18,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.EntityTag;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
@@ -56,14 +59,22 @@ public class BookResource {
 
     @GET
     @Produces(HAL_JSON)
-    public Response getBooks(@QueryParam("q") String query) {
+    public Response getBooks(@QueryParam("q") String query, @Context Request request) {
         Representation rep = rf.newRepresentation(uriInfo.getRequestUri());
         rep.withNamespace(LinkRelations.NAMESPACE, LinkRelations.NAMESPACE_HREF);
         List<Book> books = bookService.find(query);
         for (Book b : books) {
             rep.withRepresentation(LinkRelations.REL_BOOK, createSimpleRep(b));
         }
-        return Response.ok(rep).build();
+
+        // create ETag
+        EntityTag etag = new EntityTag(Integer.toString(rep.hashCode()));
+        ResponseBuilder builder = request.evaluatePreconditions(etag);
+        if (builder == null) {
+            builder = Response.ok(rep).tag(etag);
+        }
+
+        return builder.build();
     }
 
     @GET
