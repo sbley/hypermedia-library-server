@@ -15,12 +15,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.jboss.resteasy.annotations.GZIP;
+
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 
 import de.saxsys.hypermedia.rest.LinkRelations;
 
 @RequestScoped
 @Path("/")
+@GZIP
 public class HomeResource {
 
     @Inject

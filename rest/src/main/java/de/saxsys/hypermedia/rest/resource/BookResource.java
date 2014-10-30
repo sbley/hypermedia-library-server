@@ -26,6 +26,8 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.jboss.resteasy.annotations.GZIP;
+
 import com.theoryinpractise.halbuilder.api.Representation;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 
@@ -41,6 +43,7 @@ import de.saxsys.hypermedia.service.NotLentException;
 
 @RequestScoped
 @Path("books")
+@GZIP
 public class BookResource {
 
     @Inject

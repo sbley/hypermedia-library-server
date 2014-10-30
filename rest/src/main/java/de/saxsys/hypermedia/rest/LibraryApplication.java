@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import org.jboss.resteasy.plugins.interceptors.encoding.GZIPEncodingInterceptor;
+
 import de.saxsys.hypermedia.rest.filter.CorsFilter;
 import de.saxsys.hypermedia.rest.filter.LoggingFilter;
 import de.saxsys.hypermedia.rest.hal.HalBuilderMessageBodyReader;
@@ -31,6 +33,7 @@ public class LibraryApplication extends Application {
         classes.add(DefaultExceptionMapper.class);
         classes.add(LoggingFilter.class);
         classes.add(CorsFilter.class);
+        classes.add(GZIPEncodingInterceptor.class);
         return classes;
     }
 }
