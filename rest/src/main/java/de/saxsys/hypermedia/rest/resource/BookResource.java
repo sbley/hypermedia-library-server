@@ -17,6 +17,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.Request;
@@ -73,19 +74,26 @@ public class BookResource {
         if (builder == null) {
             builder = Response.ok(rep).tag(etag);
         }
-
         return builder.build();
     }
 
     @GET
     @Produces(HAL_JSON)
     @Path("{id}")
-    public Response getBook(@PathParam("id") int id) {
+    public Response getBook(@PathParam("id") int id, @Context Request request) {
         Book book = bookService.get(id);
         if (null == book) {
             throw new WebApplicationException(404);
         }
-        return Response.ok(createFullRep(book)).build();
+        Representation rep = createFullRep(book);
+
+        // create ETag
+        EntityTag etag = new EntityTag(Integer.toString(rep.hashCode()));
+        ResponseBuilder builder = request.evaluatePreconditions(etag);
+        if (builder == null) {
+            builder = Response.ok(rep).tag(etag);
+        }
+        return builder.cacheControl(cc()).build();
     }
 
     @PUT
@@ -147,6 +155,12 @@ public class BookResource {
                     .entity(errorMapper.createRepresentation("Unable to return book", e))
                     .build();
         }
+    }
+
+    private CacheControl cc() {
+        CacheControl cc = new CacheControl();
+        cc.setMaxAge(10); // 10 seconds
+        return cc;
     }
 
     private URI createUri(Book book) {
