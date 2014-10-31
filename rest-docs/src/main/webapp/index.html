@@ -1,29 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Library API Documentation</title>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Library API Documentation</title>
 
-    <!-- Bootstrap -->
-    <link href="_resources/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap theme -->
-    <link href="_resources/css/bootstrap-theme.min.css" rel="stylesheet">
+<!-- Bootstrap -->
+<link href="_resources/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap theme -->
+<link href="_resources/css/bootstrap-theme.min.css" rel="stylesheet">
 
-  </head>
-  <body role="document">
-	  <div class="container" role="main">
-	  	<div class="page-header">
-	        <h1>Library API Documentation</h1>
-	    </div>
-	    <h4>State diagram</h4>
-	    <img src="_resources/img/state_diagram.png" />
-	  </div>
+</head>
+<body role="document">
+	<div class="container" role="main">
+		<div class="page-header">
+			<h1>Library API Documentation</h1>
+		</div>
+		<h4>State diagram</h4>
+		<div class="thumbnail">
+			<img src="_resources/img/state_diagram.png" />
+		</div>
+		<h4>Media types</h4>
+		<table class="table">
+			<tbody>
+				<tr>
+					<td class="col-md-3">Response data</td>
+					<td>application/hal+json</td>
+				</tr>
+			</tbody>
+			<tbody>
+				<tr>
+					<td class="col-md-3">Request data</td>
+					<td>application/hal+json or application/json</td>
+				</tr>
+			</tbody>
+		</table>
+		<h4>Error response data</h4>
+		<pre>
+{
+	status: "error"
+	title: "some error message"
+	detail: "further description of the error"
+}		</pre>
+	</div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="_resources/js/bootstrap.min.js"></script>
-  </body>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="_resources/js/bootstrap.min.js"></script>
+</body>
 </html>
