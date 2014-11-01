@@ -155,12 +155,14 @@ public class BookResource {
                         .withProperty("id", book.getId())
                         .withProperty("title", book.getTitle())
                         .withProperty("author", book.getAuthor())
-                        .withProperty("description", book.getDescription());
-        rep.withNamespace(LinkRelations.NAMESPACE, LinkRelations.NAMESPACE_HREF)
-                .withLink(LinkRelations.REL_LEND, createUri(book).toString() + "/borrower")
-                .withLink(LinkRelations.REL_RETURN, createUri(book).toString() + "/borrower");
-        if (book.isLent())
+                        .withProperty("description", book.getDescription())
+                        .withNamespace(LinkRelations.NAMESPACE, LinkRelations.NAMESPACE_HREF);
+        if (book.isLent()) {
+            rep.withLink(LinkRelations.REL_RETURN, createUri(book).toString() + "/borrower");
             rep.withRepresentation("borrower", createRep(book.getBorrower()));
+        } else {
+            rep.withLink(LinkRelations.REL_LEND, createUri(book).toString() + "/borrower");
+        }
         return rep;
     }
 
