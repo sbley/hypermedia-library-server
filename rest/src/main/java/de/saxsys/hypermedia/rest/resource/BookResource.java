@@ -1,5 +1,8 @@
 package de.saxsys.hypermedia.rest.resource;
 
+import static de.saxsys.hypermedia.rest.hal.HalMediaTypes.HAL_JSON;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+
 import java.net.URI;
 import java.util.List;
 
@@ -15,7 +18,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -26,7 +28,6 @@ import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 import de.saxsys.hypermedia.domain.Book;
 import de.saxsys.hypermedia.domain.Member;
 import de.saxsys.hypermedia.rest.LinkRelations;
-import de.saxsys.hypermedia.rest.hal.HalMediaTypes;
 import de.saxsys.hypermedia.rest.hal.HalUtil;
 import de.saxsys.hypermedia.rest.mapping.ErrorMapper;
 import de.saxsys.hypermedia.service.AlreadyLentException;
@@ -54,7 +55,7 @@ public class BookResource {
     private ErrorMapper errorMapper;
 
     @GET
-    @Produces(HalMediaTypes.HAL_JSON)
+    @Produces(HAL_JSON)
     public Response getBooks(@QueryParam("q") String query) {
         Representation rep = rf.newRepresentation(uriInfo.getRequestUri());
         rep.withNamespace(LinkRelations.NAMESPACE, LinkRelations.NAMESPACE_HREF);
@@ -66,7 +67,7 @@ public class BookResource {
     }
 
     @GET
-    @Produces(HalMediaTypes.HAL_JSON)
+    @Produces(HAL_JSON)
     @Path("{id}")
     public Response getBook(@PathParam("id") int id) {
         Book book = bookService.get(id);
@@ -77,8 +78,8 @@ public class BookResource {
     }
 
     @PUT
-    @Produces(HalMediaTypes.HAL_JSON)
-    @Consumes({HalMediaTypes.HAL_JSON, MediaType.APPLICATION_JSON })
+    @Produces(HAL_JSON)
+    @Consumes({HAL_JSON, APPLICATION_JSON })
     @Path("{bookId}/borrower")
     public Response lend(@PathParam("bookId") int bookId, Representation repMember) {
 
@@ -117,7 +118,7 @@ public class BookResource {
     }
 
     @DELETE
-    @Produces(HalMediaTypes.HAL_JSON)
+    @Produces(HAL_JSON)
     @Path("{bookId}/borrower")
     public Response takeBack(@PathParam("bookId") int bookId) {
         Book book;

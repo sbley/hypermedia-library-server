@@ -1,5 +1,7 @@
 package de.saxsys.hypermedia.rest.resource;
 
+import static de.saxsys.hypermedia.rest.hal.HalMediaTypes.HAL_JSON;
+
 import java.net.URI;
 
 import javax.enterprise.context.RequestScoped;
@@ -15,7 +17,6 @@ import javax.ws.rs.core.UriInfo;
 import com.theoryinpractise.halbuilder.api.RepresentationFactory;
 
 import de.saxsys.hypermedia.rest.LinkRelations;
-import de.saxsys.hypermedia.rest.hal.HalMediaTypes;
 
 @RequestScoped
 @Path("/")
@@ -28,7 +29,7 @@ public class HomeResource {
     private UriInfo uriInfo;
 
     @GET
-    @Produces(HalMediaTypes.HAL_JSON)
+    @Produces(HAL_JSON)
     public Response getHome() {
         URI baseUri = uriInfo.getBaseUri();
         return Response.ok(
