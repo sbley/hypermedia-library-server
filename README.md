@@ -4,6 +4,6 @@ hypermedia-library-server
 "Library" Hypermedia API as shown at WJAX 2014
 
 Usage
-=====
+-----
 
-Build with mvn package and deploy to WildFly 8.1.0.
+Build projects with mvn package and deploy to WildFly 8.1.0.
