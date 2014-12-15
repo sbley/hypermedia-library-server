@@ -20,5 +20,22 @@
     <modules>
         <module>rest</module>
         <module>rest-docs</module>
+        <module>ear</module>
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>1.0.2.Final</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+
 </project>
